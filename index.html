@@ -142,6 +142,26 @@
   .ca-label{ display:block; font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-muted); margin-bottom:6px; }
   .ca-value{ display:block; font-family:"IBM Plex Mono", monospace; font-size:12.5px; word-break:break-all; color:var(--ink); user-select:all; }
 
+  /* ---------- live stats strip ---------- */
+  .live-strip{
+    display:flex; align-items:center; gap:30px; flex-wrap:wrap;
+    background:var(--surface); border:1px solid var(--border); border-radius:6px;
+    padding:16px 22px; margin:24px 0 8px;
+  }
+  .live-dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); flex-shrink:0; animation:live-pulse 2s infinite; }
+  @keyframes live-pulse{
+    0%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
+    70%{ box-shadow:0 0 0 9px color-mix(in srgb, var(--accent) 0%, transparent); }
+    100%{ box-shadow:0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); }
+  }
+  .live-stat{ display:flex; flex-direction:column; gap:2px; }
+  .live-stat .lv{ font-family:"IBM Plex Mono", monospace; font-size:16.5px; font-variant-numeric:tabular-nums; }
+  .live-stat .ll{ font-size:11px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.06em; }
+  .live-link{ margin-left:auto; font-size:12.5px; text-decoration:none; color:var(--accent); font-weight:600; white-space:nowrap; }
+  .live-link:hover{ text-decoration:underline; }
+  .live-updated{ font-size:11.5px; color:var(--ink-muted); margin:0 0 8px; }
+  @media (max-width:640px){ .live-strip{ gap:18px 26px; } .live-link{ margin-left:0; order:99; width:100%; } }
+
   /* ---------- section head ---------- */
   .sec-head{ display:flex; align-items:baseline; gap:16px; margin-bottom:36px; flex-wrap:wrap; }
   .sec-head h2{ font-size:clamp(30px,4vw,42px); }
@@ -226,6 +246,16 @@
 
   <section class="hero">
     <span class="tag">Model CHUTE-01 · Fixed Supply 1,000,000,000 · Built on Wheel</span>
+
+    <div class="live-strip">
+      <span class="live-dot"></span>
+      <div class="live-stat"><span class="lv">$0.00000426</span><span class="ll">Price</span></div>
+      <div class="live-stat"><span class="lv">$4.3K</span><span class="ll">Market Cap</span></div>
+      <div class="live-stat"><span class="lv">405K $CHUTE</span><span class="ll">Burned</span></div>
+      <a class="live-link" href="https://wheel.family/coins#/coin/0x7D9645f67064348961a57BA3093b660150b67a68" target="_blank" rel="noopener">View live on Wheel →</a>
+    </div>
+    <p class="live-updated">Snapshot as of Sep 8, 2026 · pulled straight from the Wheel coin page — click through above for real-time numbers.</p>
+
     <div class="hero-grid">
       <div>
         <h1>Every fall<br>needs a rig<br>you can <em>trust</em>.</h1>
