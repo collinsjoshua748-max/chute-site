@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Chute ($CHUTE) — a token built on Wheel's Parachute fee mechanism.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%AA%82%3C/text%3E%3C/svg%3E">
+<title>Chute</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4efe4;
+    --surface:#fbf8f0;
+    --surface-2:#ece2c8;
+    --ink:#16221c;
+    --ink-muted:#5c6a60;
+    --accent:#1c8f5c;
+    --accent-ink:#f4efe4;
+    --accent-2:#a8681a;
+    --hazard:#a3392c;
+    --border:#d6c9a0;
+    --stitch:#c2b489;
+    --shadow: 0 1px 0 rgba(22,34,28,.05);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0a0f0c;
+      --surface:#121a15;
+      --surface-2:#1a241d;
+      --ink:#edf3ec;
+      --ink-muted:#8fa397;
+      --accent:#33d98c;
+      --accent-ink:#08150f;
+      --accent-2:#e6a13c;
+      --hazard:#e2634a;
+      --border:#26332b;
+      --stitch:#324438;
+      --shadow: 0 1px 0 rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a0f0c;
+    --surface:#121a15;
+    --surface-2:#1a241d;
+    --ink:#edf3ec;
+    --ink-muted:#8fa397;
+    --accent:#33d98c;
+    --accent-ink:#08150f;
+    --accent-2:#e6a13c;
+    --hazard:#e2634a;
+    --border:#26332b;
+    --stitch:#324438;
+    --shadow: 0 1px 0 rgba(0,0,0,.4);
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:"Bebas Neue", "Arial Narrow", sans-serif; font-weight:400; letter-spacing:.02em; text-wrap:balance; margin:0; }
+  .mono{ font-family:"IBM Plex Mono", ui-monospace, monospace; }
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 24px; }
+
+  /* ---------- nav ---------- */
+  .nav{
+    position:sticky; top:0; z-index:20;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:14px 24px; max-width:1080px; margin:0 auto; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{ width:30px; height:30px; border-radius:50%; background:var(--surface-2); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:15px; }
+  .brand-name{ font-family:"Bebas Neue", sans-serif; font-size:22px; letter-spacing:.03em; }
+  .nav-links{ display:flex; gap:22px; font-size:13px; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-muted); }
+  .nav-links a{ text-decoration:none; }
+  .nav-links a:hover{ color:var(--accent); }
+  .nav-cta{
+    font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+    background:var(--accent); color:var(--accent-ink); padding:9px 16px;
+    border-radius:3px; text-decoration:none; font-weight:600;
+    border:1px solid var(--accent);
+  }
+  @media (max-width:720px){ .nav-links{ display:none; } }
+
+  /* ---------- rig line (left rail on desktop) ---------- */
+  .rig{ position:relative; }
+  .rig::before{
+    content:"";
+    position:absolute; left:24px; top:0; bottom:0; width:1px;
+    background:repeating-linear-gradient(to bottom, var(--stitch) 0 6px, transparent 6px 12px);
+  }
+  @media (max-width:900px){ .rig::before{ display:none; } }
+
+  section{ padding:88px 0; border-bottom:1px solid var(--border); }
+  section:last-of-type{ border-bottom:none; }
+
+  .tag{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:"IBM Plex Mono", monospace; font-size:11.5px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--ink-muted); border:1px dashed var(--stitch); border-radius:3px; padding:5px 10px;
+  }
+  .tag::before{ content:"◆"; color:var(--accent); font-size:9px; }
+
+  /* ---------- hero ---------- */
+  .hero{ padding-top:64px; }
+  .hero-grid{ display:grid; grid-template-columns:1.15fr .85fr; gap:56px; align-items:center; }
+  @media (max-width:860px){ .hero-grid{ grid-template-columns:1fr; } }
+  .hero h1{ font-size:clamp(44px,6.4vw,76px); line-height:.98; margin:18px 0 22px; }
+  .hero h1 em{ font-style:normal; color:var(--accent); }
+  .hero p.lede{ font-size:18px; color:var(--ink-muted); max-width:46ch; }
+  .cta-row{ display:flex; gap:12px; margin-top:30px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 22px; border-radius:3px; text-decoration:none;
+    font-size:13.5px; letter-spacing:.03em; font-weight:600;
+  }
+  .btn-primary{ background:var(--accent); color:var(--accent-ink); border:1px solid var(--accent); }
+  .btn-ghost{ background:transparent; color:var(--ink); border:1px solid var(--border); }
+  .btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+
+  .placard{
+    background:var(--surface); border:1px solid var(--border); border-radius:6px;
+    box-shadow:var(--shadow); padding:22px;
+  }
+  .placard-row{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px dashed var(--border); font-size:13.5px; }
+  .placard-row:last-child{ border-bottom:none; }
+  .placard-row span:first-child{ color:var(--ink-muted); }
+  .placard-row span:last-child{ font-family:"IBM Plex Mono", monospace; }
+
+  /* ---------- section head ---------- */
+  .sec-head{ display:flex; align-items:baseline; gap:16px; margin-bottom:36px; flex-wrap:wrap; }
+  .sec-head h2{ font-size:clamp(30px,4vw,42px); }
+  .sec-head .n{ font-family:"IBM Plex Mono",monospace; color:var(--ink-muted); font-size:13px; }
+
+  .lead-col{ max-width:640px; color:var(--ink-muted); margin-bottom:44px; font-size:16px; }
+  .content-col{ padding-left:0; }
+  @media (min-width:901px){ .content-col{ padding-left:56px; } }
+
+  /* ---------- mechanism diagram ---------- */
+  .mech{ display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:center; }
+  @media (max-width:760px){ .mech{ grid-template-columns:1fr; } }
+  .mech svg{ width:100%; height:auto; }
+  .mech-cards{ display:grid; gap:14px; }
+  .mech-card{ background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:16px 18px; }
+  .mech-card b{ display:block; font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+  .mech-card.dim b{ color:var(--accent-2); }
+  .mech-card p{ margin:0; font-size:14.5px; color:var(--ink-muted); }
+
+  /* ---------- stats ---------- */
+  .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+  @media (max-width:760px){ .stat-grid{ grid-template-columns:repeat(2,1fr); } }
+  .stat{ background:var(--surface); padding:24px 20px; }
+  .stat .v{ font-family:"IBM Plex Mono",monospace; font-size:26px; font-variant-numeric:tabular-nums; }
+  .stat .l{ font-size:12px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.06em; margin-top:6px; }
+
+  /* ---------- roadmap ---------- */
+  .stage{ display:grid; grid-template-columns:64px 1fr; gap:20px; padding:26px 0; border-bottom:1px dashed var(--border); }
+  .stage:last-child{ border-bottom:none; }
+  .stage-ring{
+    width:64px; height:64px; border-radius:50%; border:1px solid var(--border); background:var(--surface);
+    display:flex; align-items:center; justify-content:center; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-muted);
+    text-align:center; line-height:1.2;
+  }
+  .stage.active .stage-ring{ border-color:var(--accent); color:var(--accent); }
+  .stage h3{ font-size:24px; margin-bottom:6px; }
+  .stage .status{ font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--accent-2); }
+  .stage.active .status{ color:var(--accent); }
+  .stage p{ margin:8px 0 0; color:var(--ink-muted); max-width:56ch; font-size:15px; }
+
+  /* ---------- faq ---------- */
+  details{ border-bottom:1px solid var(--border); padding:18px 0; }
+  details:first-of-type{ border-top:1px solid var(--border); }
+  summary{ cursor:pointer; font-size:17px; display:flex; justify-content:space-between; align-items:center; list-style:none; }
+  summary::-webkit-details-marker{ display:none; }
+  summary::after{ content:"+"; font-family:"IBM Plex Mono",monospace; color:var(--ink-muted); font-size:20px; }
+  details[open] summary::after{ content:"–"; }
+  details p{ color:var(--ink-muted); margin:12px 0 0; max-width:64ch; font-size:15px; }
+
+  /* ---------- footer / hazard placard ---------- */
+  footer{ padding:56px 0 80px; }
+  .hazard{
+    border:1px dashed var(--hazard); border-radius:6px; padding:20px 22px; margin-bottom:40px;
+    font-size:13.5px; color:var(--ink-muted);
+  }
+  .hazard b{ color:var(--hazard); font-family:"IBM Plex Mono",monospace; letter-spacing:.06em; text-transform:uppercase; font-size:12px; display:block; margin-bottom:8px; }
+  .foot-grid{ display:flex; justify-content:space-between; gap:24px; flex-wrap:wrap; font-size:13px; color:var(--ink-muted); }
+  .foot-links{ display:flex; gap:18px; }
+  .foot-links a{ text-decoration:none; }
+  .foot-links a:hover{ color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">🪂</div>
+      <div class="brand-name">CHUTE</div>
+    </div>
+    <div class="nav-links">
+      <a href="#rig">How It Works</a>
+      <a href="#spec">Tokenomics</a>
+      <a href="#deploy">Roadmap</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a class="nav-cta" href="#get">Get $CHUTE</a>
+  </div>
+</div>
+
+<div class="rig">
+<div class="wrap">
+
+  <section class="hero">
+    <span class="tag">Model CHUTE-01 · Fixed Supply 1,000,000,000 · Built on Wheel</span>
+    <div class="hero-grid">
+      <div>
+        <h1>Every fall<br>needs a rig<br>you can <em>trust</em>.</h1>
+        <p class="lede">Chute isn't pitched on a chart pattern. It's built around Wheel's Parachute fee engine — a mechanism designed to run for years, not a headline for a week. No presale, no team allocation: one transaction, one fixed supply, priced from day one across 57 markets.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" id="get" href="https://wheel.family/w/CHUTE">Get $CHUTE on Wheel →</a>
+          <a class="btn btn-ghost" href="#rig">Read the rigging</a>
+        </div>
+      </div>
+      <div class="placard">
+        <div class="placard-row"><span>Ticker</span><span>$CHUTE</span></div>
+        <div class="placard-row"><span>Chain</span><span>Robinhood Chain</span></div>
+        <div class="placard-row"><span>Supply</span><span>1,000,000,000</span></div>
+        <div class="placard-row"><span>Fee mode</span><span>Parachute · 33%</span></div>
+        <div class="placard-row"><span>Fee burn</span><span>20% → $WHEEL</span></div>
+        <div class="placard-row"><span>Presser fee</span><span>0.5%</span></div>
+        <div class="placard-row"><span>Team allocation</span><span>0%</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rig">
+    <div class="sec-head"><span class="n">01</span><h2>How the rig deploys</h2></div>
+    <p class="lead-col">Every coin launched on Wheel gets its own fee engine, set once at mint and never changeable after. Chute runs in Parachute mode: instead of every fee locking away as static liquidity, a share of it is held back and paid out to the people still holding when price is down from its high — then rolls into permanent liquidity the moment a new high is made.</p>
+
+    <div class="content-col">
+      <div class="mech">
+        <svg viewBox="0 0 480 260" role="img" aria-label="Diagram of price rising to a high, dipping, being partly caught by the Parachute reserve, then continuing to a new high">
+          <line x1="30" y1="30" x2="30" y2="220" stroke="var(--border)" stroke-width="1"/>
+          <line x1="30" y1="220" x2="460" y2="220" stroke="var(--border)" stroke-width="1"/>
+          <line x1="30" y1="60" x2="460" y2="60" stroke="var(--stitch)" stroke-width="1" stroke-dasharray="3 5"/>
+          <text x="440" y="52" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ink-muted)">ATH</text>
+
+          <path d="M30,190 L110,120 L170,60 L230,150 L300,168 L360,90 L430,60"
+                fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+
+          <path d="M230,150 L300,168 L360,90 L360,220 L230,220 Z" fill="var(--accent-2)" opacity="0.16"/>
+          <line x1="230" y1="150" x2="230" y2="220" stroke="var(--accent-2)" stroke-width="1" stroke-dasharray="2 4"/>
+          <line x1="360" y1="90" x2="360" y2="220" stroke="var(--accent-2)" stroke-width="1" stroke-dasharray="2 4"/>
+          <text x="292" y="205" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10.5" fill="var(--accent-2)">CATCH ZONE · 33% OF THE DROP</text>
+
+          <circle cx="170" cy="60" r="4" fill="var(--accent)"/>
+          <circle cx="430" cy="60" r="4" fill="var(--accent)"/>
+          <text x="170" y="42" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ink-muted)">high</text>
+          <text x="430" y="42" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ink-muted)">new high →</text>
+          <text x="430" y="230" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="var(--ink-muted)">fees lock as liquidity</text>
+        </svg>
+
+        <div class="mech-cards">
+          <div class="mech-card">
+            <b>On the way down</b>
+            <p>Fees generated while price sits below its high are held in reserve and paid out to holders, in proportion to what they still hold — up to 33% of the fall covered.</p>
+          </div>
+          <div class="mech-card dim">
+            <b>On the way up</b>
+            <p>The moment price sets a new high, the reserve for that climb becomes permanent liquidity instead — locked forever, same as Standard mode.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="spec">
+    <div class="sec-head"><span class="n">02</span><h2>Spec sheet</h2></div>
+    <p class="lead-col">No hidden levers. Everything below is set by the mint transaction and written into the token — Chute can't quietly change its own rules later.</p>
+    <div class="stat-grid">
+      <div class="stat"><div class="v">1,000,000,000</div><div class="l">Fixed Supply</div></div>
+      <div class="stat"><div class="v">33%</div><div class="l">Parachute Coverage</div></div>
+      <div class="stat"><div class="v">20%</div><div class="l">Fee Burn → $WHEEL</div></div>
+      <div class="stat"><div class="v">0%</div><div class="l">Presale / Team Cut</div></div>
+    </div>
+  </section>
+
+  <section id="deploy">
+    <div class="sec-head"><span class="n">03</span><h2>The deployment sequence</h2></div>
+    <p class="lead-col">A real parachute deploys in stages — pack, pilot chute, canopy, descent. That's the order we're building in, too. This is a roadmap of intent, not a promise of price.</p>
+
+    <div class="content-col">
+      <div class="stage active">
+        <div class="stage-ring">PACK</div>
+        <div>
+          <span class="status">In progress</span>
+          <h3>Foundation</h3>
+          <p>Mint on Wheel, seed the bonding curve, publish docs and this page, open the socials, and get the fee mechanism visibly running on-chain for anyone to verify.</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-ring">PILOT</div>
+        <div>
+          <span class="status">Next</span>
+          <h3>Pilot Chute</h3>
+          <p>Grow the first real holder base, get Chute onto the trackers and screeners, and start publishing plain-language reports each time the Parachute reserve pays out.</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-ring">CANOPY</div>
+        <div>
+          <span class="status">Then</span>
+          <h3>Full Canopy</h3>
+          <p>Deeper liquidity, wider distribution, and a push to make Chute the reference example of what Parachute mode looks like at scale on Wheel.</p>
+        </div>
+      </div>
+      <div class="stage">
+        <div class="stage-ring">DESCENT</div>
+        <div>
+          <span class="status">Long horizon</span>
+          <h3>Steady Descent</h3>
+          <p>The actual goal: still here in a year. Regular transparency reports, community input on how the project evolves, and no reliance on hype cycles to stay alive.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="sec-head"><span class="n">04</span><h2>Pre-flight check</h2></div>
+    <div class="content-col">
+      <details open>
+        <summary>What chain does Chute run on?</summary>
+        <p>Robinhood Chain, launched through Wheel's factory contract. One mint transaction creates the coin, deploys its dedicated Wheel, and writes this page's link into the token so wallets and explorers can find it.</p>
+      </details>
+      <details>
+        <summary>What's the difference between Standard and Parachute mode?</summary>
+        <p>In Standard mode, every fee becomes locked liquidity, permanently. In Parachute mode — what Chute uses — fees generated while price is below its high are held back and paid to holders instead, covering up to 33% of a drawdown, then convert to liquidity again once a new high is set.</p>
+      </details>
+      <details>
+        <summary>Is there a presale or team allocation?</summary>
+        <p>No. Fixed supply of 1,000,000,000, distributed entirely through the open bonding curve from the first transaction. Nobody, including the builder, holds a pre-allocated share.</p>
+      </details>
+      <details>
+        <summary>Is this financial advice?</summary>
+        <p>No. See the note below — read it before you buy anything.</p>
+      </details>
+    </div>
+  </section>
+
+  <footer>
+    <div class="hazard">
+      <b>Read before you buy</b>
+      Chute is an independent, community-run token that uses Wheel's public fee infrastructure — it is not issued or endorsed by Wheel itself. Digital assets are volatile and can lose most or all of their value; the Parachute mechanism reduces some drawdown risk but does not eliminate it. Nothing on this page is financial, legal, or investment advice. Only put in what you can afford to lose, and verify all contract details yourself before transacting.
+    </div>
+    <div class="foot-grid">
+      <span>© 2026 Chute · an independent build on Wheel</span>
+      <div class="foot-links">
+        <a href="https://x.com/chutecoin">X</a>
+        <a href="https://wheel.family/w/CHUTE">Wheel Page</a>
+        <a href="#rig">Docs</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</div>
+
+</body>
+</html>
